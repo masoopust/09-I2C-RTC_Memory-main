@@ -60,23 +60,23 @@ int main(void)
     /*     Nastavení času v RTC */
 
     // RTC používá BCD kód, proto používám HEXA
-    zapsano[0] = 0x00;          // sekundy
-    zapsano[1] = 0x39;          // minuty
-    zapsano[2] = 0x10;          // hodiny
+    zapsano[0] = 0x00;          // na adrese 0 jsou sekundy
+    zapsano[1] = 0x00;          // na adrese 1 jsou minuty
+    zapsano[2] = 0x14;          // hodiny
     zapsano[3] = 0x01;          // den v týdnu
     zapsano[4] = 0x03;          // den
     zapsano[5] = 0x06;          // měsíc
     zapsano[6] = 0x24;          // rok
-/*
-    while(!PUSH(BTN));
+
+    while(!PUSH(BTN));   // když zmáčknu tlačítko zapíše se mi čas nastavený výše
     printf("Zápis do RTC StatusCode: %X\n",  swi2c_write_buf(0x68 <<1 , 0x00, zapsano, 7));
-*/
+
 
     while (1) {
-        if (milis() - time > 10E3) {
+        if (milis() - time > 5E3) {   // měním čas zápisu
             time = milis();
 
-            // čas
+            // čas  
             err = swi2c_read_buf(0x68 << 1, 0x00, precteno, 7);
             printf("%d%d.%d%d. 20%d%d %d%d:%d%d:%d%d \n",       // v RTC obvodu je čas uložen v BCD
                    precteno[4] >> 4, precteno[4] & 0x0F,
